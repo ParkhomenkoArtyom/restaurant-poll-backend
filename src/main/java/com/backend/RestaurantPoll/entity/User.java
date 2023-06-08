@@ -26,7 +26,7 @@ public class User {
     private String realName;
 
     @NotEmpty
-    @Size(min = 8, max = 20, message = "Не меньше 8 ")
+    @Size(min = 8, message = "Не меньше 8 ")
     private String password;
 
     @OneToMany(mappedBy="user", cascade=CascadeType.PERSIST)
