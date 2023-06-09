@@ -43,7 +43,7 @@ public class RestaurantController {
         return restaurantList.stream().map(restaurantService::convertToDto).toList();
     }
 
-    @Secured({"ROLE_USER"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/vote/{id}")
     public List<RestaurantDto> voteOnRestaurant(@PathVariable Integer id) {
         if (DailyVotingPeriodUtil.isVotingValid()) {
