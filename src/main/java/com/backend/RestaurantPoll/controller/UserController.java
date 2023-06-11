@@ -25,7 +25,7 @@ public class UserController {
         this.roleService = roleService;
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_USER"})
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/list")
     public List<UserDto> getUsers() {
         List<User> users = userService.getAllUsers();
