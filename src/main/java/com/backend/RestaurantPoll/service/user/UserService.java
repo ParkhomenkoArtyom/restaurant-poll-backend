@@ -5,6 +5,7 @@ import com.backend.RestaurantPoll.entity.User;
 import java.util.List;
 
 public interface UserService {
+    void createAdmin();
     void saveNewUser(UserDto user);
 
     User findByName(String username);

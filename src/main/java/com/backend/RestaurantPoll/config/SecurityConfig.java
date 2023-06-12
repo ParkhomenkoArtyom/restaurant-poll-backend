@@ -49,7 +49,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 }).and();
 
         http.authorizeRequests()
-                .antMatchers("/api/auth/**", "/api/registration").permitAll()
+                .antMatchers("/api/auth/**", "/api/registration","/api/user/create-admin").permitAll()
                 .antMatchers("/api/restaurant/add-update", "/api/user/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

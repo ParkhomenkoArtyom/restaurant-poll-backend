@@ -21,4 +21,9 @@ public class RoleServiceImpl implements RoleService {
         role.setCode(userRole);
         roleRepository.save(role);
     }
+
+    @Override
+    public Boolean ifAdminExist() {
+        return roleRepository.findAdmin().isPresent();
+    }
 }

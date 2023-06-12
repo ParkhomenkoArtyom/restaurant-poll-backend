@@ -5,10 +5,13 @@ import com.backend.RestaurantPoll.entity.User;
 import com.backend.RestaurantPoll.service.role.RoleService;
 import com.backend.RestaurantPoll.service.user.UserService;
 import com.backend.RestaurantPoll.util.AuthUserUtil;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,5 +44,14 @@ public class UserController {
             roleService.addUserRole(user, rolePrefix + role.toUpperCase());
         }
         return getUsers();
+    }
+
+    @PostMapping("/create-admin")
+    public ResponseEntity<?> createAdmin() {
+        if (roleService.ifAdminExist())
+            return ResponseEntity.ok("Admin is already exist");
+
+        userService.createAdmin();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

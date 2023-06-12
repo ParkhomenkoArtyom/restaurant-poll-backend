@@ -22,6 +22,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void createAdmin() {
+        User admin = new User();
+        admin.setName("administrator");
+        admin.setRealName("superuser");
+        admin.setPassword(bCryptPasswordEncoder.encode("administrator"));
+
+        Role adminRole = new Role();
+        adminRole.setCode("ROLE_ADMIN");
+        adminRole.setUser(admin);
+        admin.setRoles(Collections.singleton(adminRole));
+        userRepository.save(admin);
+    }
+
+    @Override
     public void saveNewUser(UserDto user) {
         User newUser = new User();
         newUser.setName(user.getUsername());
