@@ -1,6 +1,7 @@
 package com.backend.RestaurantPoll.entity.restaurant;
 
 import com.backend.RestaurantPoll.entity.restaurant.Restaurant;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
 @Table(name = "menu")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class Menu {
     @Id

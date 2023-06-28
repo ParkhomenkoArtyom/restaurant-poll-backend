@@ -3,10 +3,12 @@ package com.backend.RestaurantPoll.service.restaurant;
 import com.backend.RestaurantPoll.controller.dto.request.MenuRequestDto;
 import com.backend.RestaurantPoll.controller.dto.request.RestaurantRequestDto;
 import com.backend.RestaurantPoll.controller.dto.response.RestaurantResponseDto;
+import com.backend.RestaurantPoll.entity.restaurant.Menu;
 import com.backend.RestaurantPoll.entity.restaurant.Restaurant;
 import com.backend.RestaurantPoll.entity.user.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RestaurantService {
     void addRestaurant(RestaurantRequestDto restaurant);
@@ -25,5 +27,5 @@ public interface RestaurantService {
 
     List<Integer> getAllRestaurantsIdx();
 
-    void addMenuToRestaurant(Restaurant restaurant, List<MenuRequestDto> menuDto);
+    Set<Menu> addMenuToRestaurant(Restaurant restaurant, List<MenuRequestDto> menuDto);
 }

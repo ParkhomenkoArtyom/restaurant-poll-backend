@@ -71,28 +71,19 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Restaurant getFromDto(RestaurantRequestDto restaurantDto) {
-        Restaurant restaurant = new Restaurant();
-        if (restaurantDto.getId() != null) {
-            restaurant.setId(restaurantDto.getId());
-            deleteRestaurantMenu(restaurantDto.getId());
-        }
+        if(restaurantDto.getId() != null) deleteRestaurantMenu(restaurantDto.getId());
 
-        restaurant.setName(restaurantDto.getName());
-        addMenuToRestaurant(restaurant, restaurantDto.getMenu());
+        Restaurant restaurant = new Restaurant(restaurantDto.getId(), restaurantDto.getName());
+        restaurant.setMenu(addMenuToRestaurant(restaurant, restaurantDto.getMenu()));
         return restaurant;
     }
 
     @Override
-    public void addMenuToRestaurant(Restaurant restaurant, List<MenuRequestDto> menuDto) {
+    public Set<Menu> addMenuToRestaurant(Restaurant restaurant, List<MenuRequestDto> menuDto) {
         Set<Menu> menu = new LinkedHashSet<>(menuDto.size());
-        for (MenuRequestDto dto : menuDto) {
-            Menu dish = new Menu();
-            dish.setRestaurant(restaurant);
-            dish.setDishName(dto.getDishName());
-            dish.setPrice(dto.getPrice());
-            menu.add(dish);
-        }
-        restaurant.setMenu(menu);
+        for (MenuRequestDto dto : menuDto)
+            menu.add(new Menu(dto.getDishName(), dto.getPrice(), restaurant));
+        return menu;
     }
 
     private List<UserResponseDto> convertVotingUsersToDto(Restaurant restaurant) {

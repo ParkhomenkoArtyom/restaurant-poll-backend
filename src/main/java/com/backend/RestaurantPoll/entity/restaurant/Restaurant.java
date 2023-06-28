@@ -31,9 +31,8 @@ public class Restaurant {
     @OneToMany(mappedBy="restaurant", cascade=CascadeType.ALL)
     private Set<Vote> votes = new LinkedHashSet<>();
 
-    public Restaurant(Integer id, String name, Set<Menu> menu) {
+    public Restaurant(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.menu = menu;
     }
 }
