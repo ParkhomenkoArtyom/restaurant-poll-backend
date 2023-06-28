@@ -1,12 +1,13 @@
 package com.backend.RestaurantPoll.service.user;
 
-import com.backend.RestaurantPoll.dto.UserDto;
-import com.backend.RestaurantPoll.entity.User;
+import com.backend.RestaurantPoll.controller.dto.request.UserRequestDto;
+import com.backend.RestaurantPoll.controller.dto.response.UserResponseDto;
+import com.backend.RestaurantPoll.entity.user.User;
 import java.util.List;
 
 public interface UserService {
     void createAdmin();
-    void saveNewUser(UserDto user);
+    void saveNewUser(UserRequestDto user);
 
     User findByName(String username);
 
@@ -14,7 +15,7 @@ public interface UserService {
 
     Boolean isUserExist(String username);
 
-    List<UserDto> convertToDto(List<User> users);
+    List<UserResponseDto> convertToDto(List<User> users);
 
     List<User> getAllUsers();
 

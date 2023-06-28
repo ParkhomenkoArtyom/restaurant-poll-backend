@@ -1,13 +1,12 @@
 package com.backend.RestaurantPoll.controller;
 
-import com.backend.RestaurantPoll.jwt.JwtUtil;
-import com.backend.RestaurantPoll.dto.UserDto;
+import com.backend.RestaurantPoll.controller.dto.request.UserRequestDto;
+import com.backend.RestaurantPoll.util.JwtUtil;
 import com.backend.RestaurantPoll.service.user.UserService;
-import com.backend.RestaurantPoll.service.userDetails.UserDetailsImpl;
+import com.backend.RestaurantPoll.service.user.userDetails.UserDetailsImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -30,7 +29,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> createUser(@RequestBody UserRequestDto userDto) {
         if (!userService.isUserExist(userDto.getUsername())) {
             userService.saveNewUser(userDto);
             try {

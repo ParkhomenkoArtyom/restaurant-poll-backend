@@ -1,8 +1,9 @@
 package com.backend.RestaurantPoll.controller;
 
-import com.backend.RestaurantPoll.dto.RestaurantDto;
-import com.backend.RestaurantPoll.entity.Restaurant;
-import com.backend.RestaurantPoll.entity.User;
+import com.backend.RestaurantPoll.controller.dto.request.RestaurantRequestDto;
+import com.backend.RestaurantPoll.controller.dto.response.RestaurantResponseDto;
+import com.backend.RestaurantPoll.entity.restaurant.Restaurant;
+import com.backend.RestaurantPoll.entity.user.User;
 import com.backend.RestaurantPoll.service.restaurant.RestaurantService;
 import com.backend.RestaurantPoll.service.user.UserService;
 import com.backend.RestaurantPoll.service.vote.VoteService;
@@ -10,7 +11,6 @@ import com.backend.RestaurantPoll.util.AuthUserUtil;
 import com.backend.RestaurantPoll.util.DailyVotingPeriodUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,23 +29,20 @@ public class RestaurantController {
         this.voteService = voteService;
     }
 
-    @Secured({"ROLE_ADMIN"})
     @PostMapping("/add-update")
-    public ResponseEntity<?> addRestaurant(@RequestBody RestaurantDto restaurantDto) {
+    public ResponseEntity<?> addRestaurant(@RequestBody RestaurantRequestDto restaurantDto) {
         restaurantService.addRestaurant(restaurantDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/list")
-    public List<RestaurantDto> getListOfRestaurants() {
+    public List<RestaurantResponseDto> getListOfRestaurants() {
         List<Restaurant> restaurantList = restaurantService.getRestaurantList();
         return restaurantList.stream().map(restaurantService::convertToDto).toList();
     }
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/vote/{id}")
-    public List<RestaurantDto> voteOnRestaurant(@PathVariable Integer id) {
+    public List<RestaurantResponseDto> voteOnRestaurant(@PathVariable Integer id) {
         if (DailyVotingPeriodUtil.isVotingValid()) {
             User user = userService.findByName(AuthUserUtil.getAuthenticationUsername());
             if (userService.isVotingUserExist(user.getId()))
@@ -55,10 +52,8 @@ public class RestaurantController {
         }
         return getListOfRestaurants();
     }
-
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/remove-vote")
-    public List<RestaurantDto> removeUserVote() {
+    public List<RestaurantResponseDto> removeUserVote() {
         User user = userService.findByName(AuthUserUtil.getAuthenticationUsername());
         if (userService.isVotingUserExist(user.getId()))
             voteService.removeVote(user.getId());

@@ -1,13 +1,15 @@
 package com.backend.RestaurantPoll.service.restaurant;
 
-import com.backend.RestaurantPoll.dto.MenuDto;
-import com.backend.RestaurantPoll.dto.RestaurantDto;
-import com.backend.RestaurantPoll.dto.UserDto;
-import com.backend.RestaurantPoll.entity.Menu;
-import com.backend.RestaurantPoll.entity.Restaurant;
-import com.backend.RestaurantPoll.entity.User;
-import com.backend.RestaurantPoll.repository.RestaurantRepository;
-import com.backend.RestaurantPoll.service.menu.MenuService;
+import com.backend.RestaurantPoll.controller.dto.request.MenuRequestDto;
+import com.backend.RestaurantPoll.controller.dto.request.RestaurantRequestDto;
+import com.backend.RestaurantPoll.controller.dto.response.MenuResponseDto;
+import com.backend.RestaurantPoll.controller.dto.response.RestaurantResponseDto;
+import com.backend.RestaurantPoll.controller.dto.response.UserResponseDto;
+import com.backend.RestaurantPoll.entity.restaurant.Menu;
+import com.backend.RestaurantPoll.entity.restaurant.Restaurant;
+import com.backend.RestaurantPoll.entity.user.User;
+import com.backend.RestaurantPoll.repository.restaurant.RestaurantRepository;
+import com.backend.RestaurantPoll.service.restaurant.menu.MenuService;
 import com.backend.RestaurantPoll.service.user.UserService;
 import com.backend.RestaurantPoll.service.vote.VoteService;
 import org.springframework.stereotype.Service;
@@ -32,8 +34,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void addRestaurant(RestaurantDto restaurant) {
-        Restaurant restaurant1 = getFromDto(restaurant);
+    public void addRestaurant(RestaurantRequestDto restaurant) {
         restaurantRepository.save(getFromDto(restaurant));
     }
 
@@ -61,15 +62,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.findAll();
     }
 
-    private List<MenuDto> restaurantMenuToDto(Set<Menu> menu) {
+    private List<MenuResponseDto> restaurantMenuToDto(Set<Menu> menu) {
         return menu
                 .stream()
-                .map(dish -> new MenuDto(dish.getDishName(), dish.getPrice()))
+                .map(dish -> new MenuResponseDto(dish.getDishName(), dish.getPrice()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Restaurant getFromDto(RestaurantDto restaurantDto) {
+    public Restaurant getFromDto(RestaurantRequestDto restaurantDto) {
         Restaurant restaurant = new Restaurant();
         if (restaurantDto.getId() != null) {
             restaurant.setId(restaurantDto.getId());
@@ -82,9 +83,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void addMenuToRestaurant(Restaurant restaurant, List<MenuDto> menuDto) {
+    public void addMenuToRestaurant(Restaurant restaurant, List<MenuRequestDto> menuDto) {
         Set<Menu> menu = new LinkedHashSet<>(menuDto.size());
-        for (MenuDto dto : menuDto) {
+        for (MenuRequestDto dto : menuDto) {
             Menu dish = new Menu();
             dish.setRestaurant(restaurant);
             dish.setDishName(dto.getDishName());
@@ -94,15 +95,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setMenu(menu);
     }
 
-    private List<UserDto> convertVotingUsersToDto(Restaurant restaurant) {
+    private List<UserResponseDto> convertVotingUsersToDto(Restaurant restaurant) {
         List<User> users = voteService.getRestaurantVotingUsers(restaurant.getId());
-        return users.stream().map(user -> new UserDto(user.getId(), user.getName(),
+        return users.stream().map(user -> new UserResponseDto(user.getId(), user.getName(),
                 user.getRealName(), userService.getUserRoles(user))).collect(Collectors.toList());
     }
 
     @Override
-    public RestaurantDto convertToDto(Restaurant restaurant) {
-        return new RestaurantDto(restaurant.getId(), restaurant.getName().trim(),
+    public RestaurantResponseDto convertToDto(Restaurant restaurant) {
+        return new RestaurantResponseDto(restaurant.getId(), restaurant.getName().trim(),
                 convertVotingUsersToDto(restaurant),
                 restaurantMenuToDto(restaurant.getMenu()));
     }

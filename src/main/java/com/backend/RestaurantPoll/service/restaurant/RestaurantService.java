@@ -1,20 +1,21 @@
 package com.backend.RestaurantPoll.service.restaurant;
 
-import com.backend.RestaurantPoll.dto.MenuDto;
-import com.backend.RestaurantPoll.dto.RestaurantDto;
-import com.backend.RestaurantPoll.entity.Restaurant;
-import com.backend.RestaurantPoll.entity.User;
+import com.backend.RestaurantPoll.controller.dto.request.MenuRequestDto;
+import com.backend.RestaurantPoll.controller.dto.request.RestaurantRequestDto;
+import com.backend.RestaurantPoll.controller.dto.response.RestaurantResponseDto;
+import com.backend.RestaurantPoll.entity.restaurant.Restaurant;
+import com.backend.RestaurantPoll.entity.user.User;
 
 import java.util.List;
 
 public interface RestaurantService {
-    void addRestaurant(RestaurantDto restaurant);
+    void addRestaurant(RestaurantRequestDto restaurant);
 
     List<Restaurant> getRestaurantList();
 
-    RestaurantDto convertToDto(Restaurant restaurant);
+    RestaurantResponseDto convertToDto(Restaurant restaurant);
 
-    Restaurant getFromDto(RestaurantDto restaurantDto);
+    Restaurant getFromDto(RestaurantRequestDto restaurantDto);
 
     void addVoteToRestaurant(User user, Integer restaurantId);
 
@@ -24,5 +25,5 @@ public interface RestaurantService {
 
     List<Integer> getAllRestaurantsIdx();
 
-    void addMenuToRestaurant(Restaurant restaurant, List<MenuDto> menuDto);
+    void addMenuToRestaurant(Restaurant restaurant, List<MenuRequestDto> menuDto);
 }

@@ -1,17 +1,15 @@
 package com.backend.RestaurantPoll.controller;
 
-import com.backend.RestaurantPoll.dto.UserDto;
-import com.backend.RestaurantPoll.entity.User;
-import com.backend.RestaurantPoll.service.role.RoleService;
+import com.backend.RestaurantPoll.controller.dto.response.UserResponseDto;
+import com.backend.RestaurantPoll.entity.user.User;
+import com.backend.RestaurantPoll.service.user.role.RoleService;
 import com.backend.RestaurantPoll.service.user.UserService;
 import com.backend.RestaurantPoll.util.AuthUserUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,17 +25,13 @@ public class UserController {
         this.userService = userService;
         this.roleService = roleService;
     }
-
-    @Secured({"ROLE_ADMIN"})
     @GetMapping("/list")
-    public List<UserDto> getUsers() {
+    public List<UserResponseDto> getUsers() {
         List<User> users = userService.getAllUsers();
         return userService.convertToDto(users);
     }
-
-    @Secured({"ROLE_ADMIN"})
     @GetMapping("/add-role")
-    public List<UserDto> addUserRole(@RequestParam String role, @RequestParam Integer userId) {
+    public List<UserResponseDto> addUserRole(@RequestParam String role, @RequestParam Integer userId) {
         User user = userService.findById(userId);
         if (Arrays.stream(AuthUserUtil.ROLE.values())
                 .anyMatch(element -> Objects.equals(element.get(), rolePrefix + role.toUpperCase()))) {

@@ -1,7 +1,7 @@
 package com.backend.RestaurantPoll.config;
 
-import com.backend.RestaurantPoll.jwt.JwtFilter;
-import com.backend.RestaurantPoll.service.userDetails.UserDetailsServiceImpl;
+import com.backend.RestaurantPoll.filter.JwtFilter;
+import com.backend.RestaurantPoll.service.user.userDetails.UserDetailsServiceImpl;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
-
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtFilter jwtFilter;
 

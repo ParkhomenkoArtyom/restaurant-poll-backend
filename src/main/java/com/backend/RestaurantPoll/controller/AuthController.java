@@ -1,9 +1,9 @@
 package com.backend.RestaurantPoll.controller;
 
 import ch.qos.logback.core.util.Duration;
-import com.backend.RestaurantPoll.jwt.JwtUtil;
-import com.backend.RestaurantPoll.dto.UserDto;
-import com.backend.RestaurantPoll.service.userDetails.UserDetailsImpl;
+import com.backend.RestaurantPoll.controller.dto.request.UserRequestDto;
+import com.backend.RestaurantPoll.util.JwtUtil;
+import com.backend.RestaurantPoll.service.user.userDetails.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -33,11 +33,11 @@ class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> login(@RequestBody UserRequestDto userRequestDto) {
         try {
             Authentication authenticate = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(
-                            userDto.getUsername(), userDto.getPassword())
+                            userRequestDto.getUsername(), userRequestDto.getPassword())
                     );
 
             UserDetailsImpl user = (UserDetailsImpl) authenticate.getPrincipal();

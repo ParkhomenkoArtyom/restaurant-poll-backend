@@ -12,20 +12,19 @@ import java.util.Random;
 public class RandomUtil {
     private final HashSet<Integer> input = new HashSet<>();
     private final Random random;
-    private final int Count;
+    private final int count;
     private int genCount = 0;
 
     public RandomUtil(int in) {
-        Count = in;
+        count = in;
         random = new Random(in);
     }
 
     public int generate() {
-        if (genCount >= Count)
-            return -1;
+        if (genCount >= count) return -1;
         int next;
         do {
-            next = random.nextInt(Count);
+            next = random.nextInt(count);
         }
         while (!input.add(next));
         genCount++;

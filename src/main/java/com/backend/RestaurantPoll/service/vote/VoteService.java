@@ -1,7 +1,7 @@
 package com.backend.RestaurantPoll.service.vote;
 
-import com.backend.RestaurantPoll.entity.Restaurant;
-import com.backend.RestaurantPoll.entity.User;
+import com.backend.RestaurantPoll.entity.restaurant.Restaurant;
+import com.backend.RestaurantPoll.entity.user.User;
 
 import java.util.List;
 
