@@ -8,6 +8,7 @@ import com.backend.RestaurantPoll.controller.dto.response.UserResponseDto;
 import com.backend.RestaurantPoll.entity.restaurant.Menu;
 import com.backend.RestaurantPoll.entity.restaurant.Restaurant;
 import com.backend.RestaurantPoll.entity.user.User;
+import com.backend.RestaurantPoll.exception.RestaurantNotFoundException;
 import com.backend.RestaurantPoll.repository.restaurant.RestaurantRepository;
 import com.backend.RestaurantPoll.service.restaurant.menu.MenuService;
 import com.backend.RestaurantPoll.service.user.UserService;
@@ -100,8 +101,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void addVoteToRestaurant(User user, Integer restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
+    public void addVoteToRestaurant(User user, Integer restaurantId) throws RestaurantNotFoundException {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(()-> new RestaurantNotFoundException("Restaurant with id " + restaurantId + " not found")
+        );
         voteService.saveNewRestaurantVote(user, restaurant);
     }
 }

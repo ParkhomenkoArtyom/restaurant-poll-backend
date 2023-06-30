@@ -4,6 +4,8 @@ import com.backend.RestaurantPoll.controller.dto.request.RestaurantRequestDto;
 import com.backend.RestaurantPoll.controller.dto.response.RestaurantResponseDto;
 import com.backend.RestaurantPoll.entity.restaurant.Restaurant;
 import com.backend.RestaurantPoll.entity.user.User;
+import com.backend.RestaurantPoll.exception.RestaurantNotFoundException;
+import com.backend.RestaurantPoll.exception.UserNotFoundException;
 import com.backend.RestaurantPoll.service.restaurant.RestaurantService;
 import com.backend.RestaurantPoll.service.user.UserService;
 import com.backend.RestaurantPoll.service.vote.VoteService;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -31,7 +34,11 @@ public class RestaurantController {
 
     @PostMapping("/add-update")
     public ResponseEntity<?> addRestaurant(@RequestBody RestaurantRequestDto restaurantDto) {
-        restaurantService.addRestaurant(restaurantDto);
+        try {
+            restaurantService.addRestaurant(restaurantDto);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -42,16 +49,21 @@ public class RestaurantController {
     }
 
     @GetMapping("/vote/{id}")
-    public List<RestaurantResponseDto> voteOnRestaurant(@PathVariable Integer id) {
+    public ResponseEntity<?> voteOnRestaurant(@PathVariable Integer id)  {
         if (DailyVotingPeriodUtil.isVotingValid()) {
             User user = userService.findByName(AuthUserUtil.getAuthenticationUsername());
             if (userService.isVotingUserExist(user.getId()))
                 voteService.removeVote(user.getId());
 
-            restaurantService.addVoteToRestaurant(user, id);
+            try {
+                restaurantService.addVoteToRestaurant(user, id);
+            } catch (RestaurantNotFoundException ex) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            }
         }
-        return getListOfRestaurants();
+        return ResponseEntity.ok(getListOfRestaurants());
     }
+
     @GetMapping("/remove-vote")
     public List<RestaurantResponseDto> removeUserVote() {
         User user = userService.findByName(AuthUserUtil.getAuthenticationUsername());

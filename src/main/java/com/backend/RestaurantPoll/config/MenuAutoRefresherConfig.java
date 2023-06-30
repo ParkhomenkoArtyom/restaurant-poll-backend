@@ -55,7 +55,7 @@ public class MenuAutoRefresherConfig {
             randomDishesIds.add(randomUtil.generate());
         }
 
-        for (Integer randomDishId : randomDishesIds) {
+        for (int randomDishId : randomDishesIds) {
             Dish randomDish = dishService.getDishById(randomDishId + 1);
             Menu menuDish = new Menu(randomDish.getDish(),randomDish.getPrice(), restaurant);
             menuService.saveMenu(menuDish);

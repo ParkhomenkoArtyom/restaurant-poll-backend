@@ -25,6 +25,7 @@ public class Restaurant {
     @Size(min = 3, max = 20, message = "At least 3 and no more 20 characters")
     private String name;
 
+    @NotNull
     @OneToMany(mappedBy="restaurant", cascade=CascadeType.ALL)
     private Set<Menu> menu = new LinkedHashSet<>();
 

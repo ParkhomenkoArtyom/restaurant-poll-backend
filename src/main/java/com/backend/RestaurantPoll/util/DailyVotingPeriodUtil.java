@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 
 public final class DailyVotingPeriodUtil {
     //Hour until which the vote is valid
-    public static final Integer DAILY_VOTING_END_HOUR = 11;
+    public static final Integer DAILY_VOTING_END_HOUR = 16;
 
     //Check if user can vote on restaurant
     public static boolean isVotingValid() {

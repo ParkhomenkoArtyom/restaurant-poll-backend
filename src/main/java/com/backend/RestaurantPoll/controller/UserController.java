@@ -2,6 +2,8 @@ package com.backend.RestaurantPoll.controller;
 
 import com.backend.RestaurantPoll.controller.dto.response.UserResponseDto;
 import com.backend.RestaurantPoll.entity.user.User;
+import com.backend.RestaurantPoll.exception.InvalidRoleException;
+import com.backend.RestaurantPoll.exception.UserNotFoundException;
 import com.backend.RestaurantPoll.service.user.role.RoleService;
 import com.backend.RestaurantPoll.service.user.UserService;
 import com.backend.RestaurantPoll.util.AuthUserUtil;
@@ -25,19 +27,27 @@ public class UserController {
         this.userService = userService;
         this.roleService = roleService;
     }
+
     @GetMapping("/list")
     public List<UserResponseDto> getUsers() {
         List<User> users = userService.getAllUsers();
         return userService.convertToDto(users);
     }
+
     @GetMapping("/add-role")
-    public List<UserResponseDto> addUserRole(@RequestParam String role, @RequestParam Integer userId) {
-        User user = userService.findById(userId);
+    public ResponseEntity<?> addUserRole(@RequestParam String role, @RequestParam Integer userId) {
+        User user;
+        try {
+            user = userService.findById(userId);
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
         if (Arrays.stream(AuthUserUtil.ROLE.values())
                 .anyMatch(element -> Objects.equals(element.get(), rolePrefix + role.toUpperCase()))) {
             roleService.addUserRole(user, rolePrefix + role.toUpperCase());
-        }
-        return getUsers();
+        } else return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new InvalidRoleException("Invalid role").getMessage());
+        return ResponseEntity.ok(getUsers());
     }
 
     @PostMapping("/create-admin")
